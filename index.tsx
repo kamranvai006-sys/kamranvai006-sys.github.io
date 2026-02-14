@@ -1,0 +1,1 @@
+// This application uses index.html as a single-file entry point for maximum speed and compatibility in Telegram Mini Apps.
