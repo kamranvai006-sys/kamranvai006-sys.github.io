@@ -1,8 +1,8 @@
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { PredictionState, WinGoResult } from '../types';
 import { fetchHistory, analyzeTrend, getNextPeriod } from '../services/predictionService';
-import { Copy, Scan, Zap, ShieldCheck, Activity } from 'lucide-react';
+import { Copy, Scan, Zap, ShieldCheck, Activity, Trophy } from 'lucide-react';
 
 interface Props {
   isBlocked: boolean;
@@ -112,6 +112,7 @@ const FloatingBox: React.FC<Props> = ({ isBlocked }) => {
     setState({
       nextPeriod: nextP,
       prediction: pred,
+      // Randomizing win level for visual demonstration
       level: (Math.floor(Math.random() * 3) + 1) as 1 | 2 | 3,
       status: 'ready'
     });
@@ -189,19 +190,34 @@ const FloatingBox: React.FC<Props> = ({ isBlocked }) => {
           </div>
         </div>
 
-        {/* 3 Step Win Circles */}
-        <div className="flex justify-between px-4">
-          {[1, 2, 3].map((lv) => (
-            <div key={lv} className="flex flex-col items-center gap-1">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
-                state.level === lv && state.status === 'ready'
-                  ? 'bg-[#00ffcc] border-[#00ffcc] shadow-[0_0_10px_#00ffcc]'
-                  : 'bg-transparent border-gray-700'
-              }`}>
-                <span className={`text-[10px] font-bold ${state.level === lv && state.status === 'ready' ? 'text-black' : 'text-gray-600'}`}>L{lv}</span>
-              </div>
-            </div>
-          ))}
+        {/* 3 Step Win Circles Logic Enhancement */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[9px] text-[#00ffcc]/60 uppercase font-bold flex items-center gap-1">
+              <Trophy size={10} /> Win Progression
+            </span>
+            {state.status === 'ready' && (
+              <span className="text-[9px] text-yellow-400 font-bold animate-pulse">LEVEL {state.level} HIT!</span>
+            )}
+          </div>
+          <div className="flex justify-between px-4">
+            {[1, 2, 3].map((lv) => {
+              const isHighlighted = state.status === 'ready' && lv <= state.level;
+              const isCurrent = state.status === 'ready' && lv === state.level;
+              
+              return (
+                <div key={lv} className="flex flex-col items-center gap-1">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
+                    isHighlighted
+                      ? 'bg-[#00ffcc] border-[#00ffcc] shadow-[0_0_15px_#00ffcc] text-black'
+                      : 'bg-transparent border-gray-700 text-gray-600'
+                  } ${isHighlighted ? 'animate-win' : ''}`}>
+                    <span className={`text-xs font-black`}>L{lv}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Action Button */}
@@ -245,7 +261,7 @@ const FloatingBox: React.FC<Props> = ({ isBlocked }) => {
       {/* Footer Branding */}
       <div className="bg-black/60 px-4 py-2 border-t border-[#00ffcc]/10 flex items-center justify-center">
         <ShieldCheck size={12} className="text-[#00ffcc] mr-1" />
-        <span className="text-[9px] text-gray-500 tracking-widest">ENCRYPTED NEURAL FEED v4.0.1</span>
+        <span className="text-[9px] text-gray-500 tracking-widest uppercase">Encrypted Neural Feed</span>
       </div>
     </div>
   );
