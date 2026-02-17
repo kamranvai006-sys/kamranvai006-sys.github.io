@@ -1,5 +1,5 @@
 {
-  "name": "red-guyava-earning",
+  "name": "sejan-neural-ai---wingo-30s",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "firebase": "^12.9.0",
-    "react": "^19.2.4"
+    "lucide-react": "^0.564.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
